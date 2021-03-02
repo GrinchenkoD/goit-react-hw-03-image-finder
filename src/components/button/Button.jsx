@@ -2,7 +2,7 @@ import React from 'react'
 
 function Button({ loadMore }) {
     return (
-        <div>
+        <div className="btn-container">
             <button type="button" className="Button" onClick={loadMore}>Load more</button>
         </div>
     )

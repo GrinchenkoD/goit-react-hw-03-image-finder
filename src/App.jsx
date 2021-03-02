@@ -11,16 +11,26 @@ export default class App extends Component {
 
   state = {
     pictures: [],
-    searchQuery:'',
+    searchQuery: '',
     loading: false,
-    page:1,
+    page: 1,
   }
-  
-  onSubmit = (query) => {
-    this.setState({pictures:[], searchQuery:query, loading: true, page: 1})
+
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      console.log('зашло')
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }
+
+  onSubmit = async (query) => {
+    await this.setState({ pictures: [], searchQuery: query, loading: true, page: 1 })
 
     this.fetchQuery()
-  
+
   }
 
   fetchQuery = () => {
@@ -30,8 +40,8 @@ export default class App extends Component {
     axios
       .get(url)
       .then(data => {
-        
-        this.setState((prevState)=>({pictures:[...prevState.pictures, ...data.data.hits]}))
+
+        this.setState((prevState) => ({ pictures: [...prevState.pictures, ...data.data.hits] }))
       })
       .catch(error => { console.log(error) })
       .finally(() => this.setState({ loading: false }))
@@ -40,21 +50,22 @@ export default class App extends Component {
   loadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
     this.fetchQuery()
+
   }
 
   render() {
-  const {loading, pictures} =this.state
+    const { loading, pictures } = this.state
 
 
     return (
-    <div>
-      <Searchbar onSubmit={this.onSubmit }/>
-        <ImageGallery pictures={ pictures}/>
+      <>
+        <Searchbar onSubmit={this.onSubmit} />
+        {pictures.length > 0 && <ImageGallery pictures={pictures} />}
         {loading && < Loader />}
-        { pictures.length>0 && <Button loadMore={this.loadMore} />}
+        { pictures.length > 0 && <Button loadMore={this.loadMore} />}
 
-    </div>
-    
+      </>
+
     )
   }
 }

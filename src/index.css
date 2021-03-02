@@ -180,6 +180,12 @@ img {
 /*
 * Стили компонента Buton (Load more)
 */
+.btn-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 .Button {
   padding: 8px 16px;
   border-radius: 2px;
@@ -208,6 +214,12 @@ img {
 
 /* стили Loader */
 
+.spinner-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 .lds-spinner {
   
   display: inline-block;
@@ -228,7 +240,7 @@ img {
   width: 6px;
   height: 18px;
   border-radius: 20%;
-  background: #303f9f;
+  background: #3f51b5;
 }
 .lds-spinner div:nth-child(1) {
   transform: rotate(0deg);
