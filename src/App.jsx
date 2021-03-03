@@ -20,8 +20,7 @@ export default class App extends Component {
   }
 
   componentDidUpdate(_prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
-      console.log('зашло')
+    if (prevState.page !== this.state.page && prevState.page !== 1) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: 'smooth',
@@ -44,14 +43,13 @@ export default class App extends Component {
       .get(url)
       .then(data => {
 
-        this.setState((prevState) => ({ pictures: [...prevState.pictures, ...data.data.hits] }))
+        this.setState((prevState) => ({ pictures: [...prevState.pictures, ...data.data.hits], page: prevState.page + 1 }))
       })
       .catch(error => { console.log(error) })
       .finally(() => this.setState({ loading: false }))
   }
 
   loadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
     this.fetchQuery()
 
   }
@@ -72,9 +70,9 @@ export default class App extends Component {
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        {pictures.length > 0 && <ImageGallery pictures={pictures} openModal={this.openModal} />}
+        {!!pictures.length && <ImageGallery pictures={pictures} openModal={this.openModal} />}
         {loading && < Loader />}
-        { pictures.length > 0 && <Button loadMore={this.loadMore} />}
+        { !!pictures.length && <Button loadMore={this.loadMore} />}
         {modalOpen && <Modal onClose={this.handleToggleModal} modalUrl={modalUrl} />}
       </>
 
