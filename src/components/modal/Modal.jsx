@@ -14,7 +14,9 @@ export default class Modal extends Component {
     }
 
     handleBackdrop = (event) => {
-        this.props.onClose()
+        if (event.target === event.currentTarget) {
+            this.props.onClose()
+        }
     }
 
     handleKeyDown = (event) => {
