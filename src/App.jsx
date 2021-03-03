@@ -6,6 +6,7 @@ import Button from './components/button';
 import Loader from './components/loader';
 
 import axios from "axios"
+import Modal from './components/modal';
 
 export default class App extends Component {
 
@@ -14,6 +15,8 @@ export default class App extends Component {
     searchQuery: '',
     loading: false,
     page: 1,
+    modalOpen: false,
+    modalUrl: '',
   }
 
   componentDidUpdate(_prevProps, prevState) {
@@ -53,17 +56,26 @@ export default class App extends Component {
 
   }
 
+  openModal = (url) => {
+    this.handleToggleModal()
+    this.setState({ modalUrl: url })
+  }
+
+  handleToggleModal = () => {
+    this.setState((prevState) => ({ modalOpen: !prevState.modalOpen }));
+  };
+
   render() {
-    const { loading, pictures } = this.state
+    const { loading, pictures, modalOpen, modalUrl } = this.state
 
 
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        {pictures.length > 0 && <ImageGallery pictures={pictures} />}
+        {pictures.length > 0 && <ImageGallery pictures={pictures} openModal={this.openModal} />}
         {loading && < Loader />}
         { pictures.length > 0 && <Button loadMore={this.loadMore} />}
-
+        {modalOpen && <Modal onClose={this.handleToggleModal} modalUrl={modalUrl} />}
       </>
 
     )
